@@ -1,0 +1,20 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+yapf = "*"
+bpython = "*"
+mypy = "*"
+
+[packages]
+Pillow = {version = ">=2"}
+anki = ">=2.1.25"
+aqt = ">=2.1.25"
+ankirspy = "*"
+pyqt5 = ">=5.14.2"
+pyqtwebengine = "*"
+
+[requires]
+python_version = "3.8"

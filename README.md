@@ -1,2 +1,24 @@
-# anki-image-scaler
-An Anki plugin that scales images during editing
+# Anki Image Scaler
+
+An Anki plugin that scales images during editing. This plugin sets CSS
+`max-height` property of all images in a note field to the desired value.
+
+## Background
+
+I like to make sure my Anki notes look good. Having a card that is small enough
+to display on a phone screen is a desirable property. That requires resizing
+images, so that they are small.
+
+## Installation
+
+1. Go to the source directory: `cd imagescaler`
+2. Zip its contents into a package: `zip -r ../imagescaler.ankiaddon *.py *.json`
+3. Import `imagescaler.ankiaddon` in Anki.
+
+## For Developers
+
+Use pipenv to set up the dev and prod environment.
+
+### Testing
+
+Run `testall` to run Mypy and unit tests.
