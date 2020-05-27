@@ -3,6 +3,10 @@
 An Anki plugin that scales images during editing. This plugin sets CSS
 `max-height` property of all images in a note field to the desired value.
 
+<p align="center">
+  <img src="images/dune-scale.gif" height="350px"/>
+</p>
+
 ## Background
 
 I like to make sure my Anki notes look good. Having a card that is small enough
