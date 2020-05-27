@@ -25,7 +25,7 @@ def ask_for_new_height() -> Optional[int]:
     new_height, ok = QInputDialog.getInt(
         parent,
         'Enter image height',
-        'Prove a new max-height for the image:',
+        'Provide a new height for the image (px):',
         value=get_config('default-height', default=150),
         min=0,
         max=10000)
