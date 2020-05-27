@@ -12,7 +12,8 @@ images, so that they are small.
 ## Installation
 
 1. Go to the source directory: `cd imagescaler`
-2. Zip its contents into a package: `zip -r ../imagescaler.ankiaddon *.py *.json`
+2. Zip its contents into a package:
+   `zip -r ../imagescaler.ankiaddon *.py *.json icons/*.png`
 3. Import `imagescaler.ankiaddon` in Anki.
 
 ## For Developers

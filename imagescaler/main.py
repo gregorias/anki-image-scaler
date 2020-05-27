@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """The implementation of the image scaler plugin."""
+import os.path
 import re
 from typing import List, Optional
 
@@ -11,6 +12,7 @@ import bs4  # type: ignore
 from bs4 import BeautifulSoup  # type: ignore
 from PyQt5.QtWidgets import QInputDialog  # type: ignore
 
+addon_path = os.path.dirname(__file__)
 config = aqt.mw and aqt.mw.addonManager.getConfig(__name__)
 
 
@@ -80,12 +82,13 @@ def css_scale(editor) -> None:
 
 def on_editor_buttons_init(buttons: List, editor) -> None:
     shortcut = get_config("shortcut", "ctrl+s")
+    icon_path = os.path.join(addon_path, "icons", "scale.png")
     css = editor.addButton(
-        icon='',
+        icon=icon_path,
         cmd="css_scale",
         func=css_scale,
         tip="Scale image using max-height ({}).".format(shortcut),
-        label="Scale CSS",
+        # Skip label, because we already provide an icon.
         keys=shortcut)
     buttons.append(css)
 
