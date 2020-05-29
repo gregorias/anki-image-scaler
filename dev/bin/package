@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+cd imagescaler
+zip -r ../imagescaler.ankiaddon *.py *.json icons/*.png
