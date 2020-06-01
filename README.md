@@ -12,7 +12,7 @@ An Anki plugin that scales images during editing. This plugin sets CSS
 I spend a lot of time solving Anki cards, and I believe that Anki notes should
 look good. I solve most of my cards on my phone that, as any phone, has a small
 screen, so when I create a new card, I usually scale down added images, so that
-the card will look good on my phone.
+the card is pleasant to look at.
 
 ## Installation
 
