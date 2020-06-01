@@ -26,3 +26,8 @@ Use pipenv to set up the dev and prod environment.
 ### Testing
 
 Run `testall` to run Mypy and unit tests.
+
+### Publishing
+
+The plugin is published and distributed on
+[AnkiWeb](https://ankiweb.net/shared/info/1312865748).
