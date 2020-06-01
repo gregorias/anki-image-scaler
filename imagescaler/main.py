@@ -2,7 +2,7 @@
 """The implementation of the image scaler plugin."""
 import os.path
 import re
-from typing import List, Optional
+from typing import Callable, List, Optional
 
 import aqt
 from aqt import gui_hooks
@@ -20,12 +20,15 @@ def get_config(key: str, default):
     return (config and config.get(key, default)) or default
 
 
-def ask_for_new_height() -> Optional[int]:
+HeightProvider = Callable[[str], Optional[int]]
+
+
+def ask_for_new_height(image: str) -> Optional[int]:
     parent = (aqt.mw and aqt.mw.app.activeWindow()) or aqt.mw
     new_height, ok = QInputDialog.getInt(
         parent,
         'Enter image height',
-        'Provide a new height for the image (px):',
+        'Provide a new height for {image:s} (px):'.format(image=image),
         value=get_config('default-height', default=150),
         min=0,
         max=10000)
@@ -53,11 +56,15 @@ def scale_an_image_with_css(img: bs4.element.Tag, height: int) -> None:
         r'\g<prefix>' + '{height:d}'.format(height=height) + r'px\2', style)
 
 
-def scale_images_with_css(html: str, height: int) -> str:
-    assert (height >= 0)
+def scale_images_with_css(html: str, height_provider: HeightProvider) -> str:
     bs = BeautifulSoup(html, features='html.parser')
     imgs = bs.findAll('img')
     for img in imgs:
+        maybe_height = height_provider(img.attrs['src'])
+        if not maybe_height:
+            continue
+        height = maybe_height
+        assert (height >= 0)
         scale_an_image_with_css(img, height)
     return str(bs)
 
@@ -69,12 +76,12 @@ def css_scale(editor) -> None:
             "Please select a note field before running the image scaler.")
         return None
 
-    new_height = ask_for_new_height()
-    if not new_height:
-        return None
-
     field = editor.note.fields[editor.currentField]
-    new_field = scale_images_with_css(field, new_height)
+    new_field = scale_images_with_css(field, ask_for_new_height)
+    if new_field == field:
+        # Don't bother refreshing the editor. It is disturbing, e.g., the field
+        # loses focus, so we should avoid it.
+        return
     editor.note.fields[editor.currentField] = new_field
     editor.note.flush()
     editor.mw.reset()
