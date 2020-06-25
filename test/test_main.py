@@ -66,3 +66,10 @@ class ScaleWithCssTestCase(unittest.TestCase):
             '<img src="img.jpg" style="max-height:200px;"/></div>')
         self.assertEqual(main.scale_images_with_css(input, height_generator),
                          expected_output)
+
+    def test_scale_correctly_formats_html(self):
+        input = '<div>&lt;img&gt;</div>'
+        expected_output = '<div>&lt;img&gt;</div>'
+        self.assertEqual(
+            main.scale_images_with_css(input, stub_height_provider(200)),
+            expected_output)
