@@ -10,13 +10,8 @@ mypy = "*"
 grip = "*"
 
 [packages]
-anki = "==2.1.26"
-aqt = "==2.1.26"
+anki = "==2.1.35"
+ankirspy = "==2.1.35"
+aqt = "==2.1.35"
 pyqt5 = "==5.14"
 pyqtwebengine = "==5.14"
-# Not a dependency of this project but setting a protobuf version helps the
-# PIP resolver.
-protobuf = "==3.12.1"
-
-[requires]
-python_version = "3.8"
