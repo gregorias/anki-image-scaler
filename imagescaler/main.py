@@ -4,9 +4,9 @@ import os.path
 import re
 from typing import Callable, List, Optional
 
-import aqt
+import aqt  # type: ignore
 from aqt import gui_hooks
-from aqt.utils import showInfo, showWarning
+from aqt.utils import showInfo, showWarning  # type: ignore
 
 import bs4  # type: ignore
 from bs4 import BeautifulSoup  # type: ignore
