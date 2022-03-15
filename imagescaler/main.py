@@ -70,13 +70,16 @@ def scale_images_with_css(html: str, height_provider: HeightProvider) -> str:
 
 
 def css_scale(editor) -> None:
-    if editor.currentField is None:
+    # Save the currentField into a variable. Anki may turn editor.currentField
+    # to None while running this function, because we show a dialog.
+    currentField = editor.currentField
+    if currentField is None:
         showWarning(
             "You've run the image scaler without selecting a field.\n" +
             "Please select a note field before running the image scaler.")
         return None
 
-    field = editor.note.fields[editor.currentField]
+    field = editor.note.fields[currentField]
     # Provide the editor as the parent widget to ask_for_new_height. This way,
     # when ask_for_new_height's widget quits, focus goes back to the editor.
     new_field = scale_images_with_css(
@@ -85,7 +88,7 @@ def css_scale(editor) -> None:
         # Don't bother refreshing the editor. It is disturbing, e.g., the field
         # loses focus, so we should avoid it.
         return
-    editor.note.fields[editor.currentField] = new_field
+    editor.note.fields[currentField] = new_field
     # That's how aqt.editor.onHtmlEdit saves cards.
     # It's better than `editor.mw.reset()`, because the latter loses focus.
     # Calls like editor.mw.reset() or editor.loadNote() are necessary to save
