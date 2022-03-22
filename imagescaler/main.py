@@ -17,7 +17,10 @@ config = aqt.mw and aqt.mw.addonManager.getConfig(__name__)
 
 
 def get_config(key: str, default):
-    return (config and config.get(key, default)) or default
+    if config:
+        return config.get(key, default)
+    else:
+        return default
 
 
 HeightProvider = Callable[[str], Optional[int]]
@@ -69,17 +72,22 @@ def scale_images_with_css(html: str, height_provider: HeightProvider) -> str:
     return str(bs)
 
 
-def css_scale(editor) -> None:
+def css_scale(editor: aqt.editor.Editor) -> None:
     # Save the currentField into a variable. Anki may turn editor.currentField
     # to None while running this function, because we show a dialog.
     currentField = editor.currentField
+    currentNote = editor.note
     if currentField is None:
         showWarning(
             "You've run the image scaler without selecting a field.\n" +
             "Please select a note field before running the image scaler.")
         return None
+    if currentNote is None:
+        showWarning("You've run the image scaler without selecting a note.\n" +
+                    "Please select a note before running the image scaler.")
+        return None
 
-    field = editor.note.fields[currentField]
+    field = currentNote.fields[currentField]
     # Provide the editor as the parent widget to ask_for_new_height. This way,
     # when ask_for_new_height's widget quits, focus goes back to the editor.
     new_field = scale_images_with_css(
@@ -88,27 +96,34 @@ def css_scale(editor) -> None:
         # Don't bother refreshing the editor. It is disturbing, e.g., the field
         # loses focus, so we should avoid it.
         return
-    editor.note.fields[currentField] = new_field
+    currentNote.fields[currentField] = new_field
     # That's how aqt.editor.onHtmlEdit saves cards.
     # It's better than `editor.mw.reset()`, because the latter loses focus.
     # Calls like editor.mw.reset() or editor.loadNote() are necessary to save
     # HTML changes.
     if not editor.addMode:
-        editor.note.flush()
+        currentNote.flush()
     editor.loadNoteKeepingFocus()
 
 
-def on_editor_buttons_init(buttons: List, editor) -> None:
+def on_editor_buttons_init(buttons: List, editor: aqt.editor.Editor) -> None:
     shortcut = get_config("shortcut", "ctrl+s")
-    icon_path = os.path.join(addon_path, "icons", "scale.png")
-    css = editor.addButton(
-        icon=icon_path,
-        cmd="css_scale",
-        func=css_scale,
-        tip="Scale image using max-height ({}).".format(shortcut),
-        # Skip label, because we already provide an icon.
-        keys=shortcut)
-    buttons.append(css)
+    add_buttons = get_config("add_editor_buttons", True)
+    if add_buttons:
+        icon_path = os.path.join(addon_path, "icons", "scale.png")
+        css = editor.addButton(
+            icon=icon_path,
+            cmd="css_scale",
+            func=css_scale,
+            tip="Scale image using max-height ({}).".format(shortcut),
+            # Skip label, because we already provide an icon.
+            keys=shortcut)
+        buttons.append(css)
+    else:
+        aqt.qt.QShortcut(  # type: ignore
+            aqt.qt.QKeySequence(shortcut),  # type: ignore
+            editor.widget,
+            activated=lambda: css_scale(editor))
 
 
 gui_hooks.editor_did_init_buttons.append(on_editor_buttons_init)

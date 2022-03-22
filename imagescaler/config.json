@@ -1,4 +1,5 @@
 {
   "default-height": 150,
-  "shortcut": "ctrl+s"
+  "shortcut": "ctrl+s",
+  "add_editor_buttons": true
 }
