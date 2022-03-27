@@ -7,13 +7,35 @@ from typing import Optional
 
 
 def stub_height_provider(default_height: int) -> main.HeightProvider:
+
     def height_provider(img: str) -> Optional[int]:
         return default_height
 
     return height_provider
 
 
+class BulkHeightProviderTestCase(unittest.TestCase):
+
+    def test_returns_none_when_cancelled(self):
+
+        class HeightDialog:
+
+            def __init__(self):
+                self.count = 0
+
+            def __call__(self, a, b, c):
+                self.count += 1
+                return None
+
+        dialog = HeightDialog()
+        bulk_height_provider = main.BulkHeightProvider(dialog)
+        self.assertEqual(bulk_height_provider("a.png"), None)
+        self.assertEqual(bulk_height_provider("a.png"), None)
+        self.assertEqual(dialog.count, 1)
+
+
 class ScaleWithCssTestCase(unittest.TestCase):
+
     def test_scales_an_image(self):
         input = ('<div><img src="a.png"/></div>')
         expected_output = (

@@ -1,5 +1,6 @@
 {
   "default-height": 150,
   "shortcut": "ctrl+s",
+  "bulk_shortcut": "ctrl+shift+s",
   "add_editor_buttons": true
 }

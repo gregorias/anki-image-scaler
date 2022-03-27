@@ -29,14 +29,14 @@ management.
 
 ## Usage
 
-Select a field with and image and press `CTRL+S`.
+Select a field with an image and press `CTRL+S` or `CTRL+SHIFT+S`.
 
 ### Configuration
 
 You can configure the plugin using Anki's configuration to do the following:
 
 * Change the default height.
-* Change the keyboard shortcut.
+* Change keyboard shortcuts.
 * Stop adding a scale button to the editor (the keyboard shortcut will still be active).
 
 ## For Developers
