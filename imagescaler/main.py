@@ -147,7 +147,13 @@ def css_scale(
 
 def on_editor_buttons_init(buttons: List, editor: aqt.editor.Editor) -> None:
     shortcut = get_config("shortcut", "ctrl+s")
-    bulk_shortcut = get_config("bulk_shortcut", "ctrl+shift+s")
+    # Choosing the default as ctrl+alt+b, because:
+    # * ctrl+shift+s is already taken by Anki.
+    #   (https://anki.tenderapp.com/discussions/beta-testing/152-2034-beta-2-21-mar)
+    # * ctrl+alt+s, ctrl+b are also taken by Anki.
+    # * ctrl+shift+alt+s is taken by another plugin for centering text.
+    # * b stands for bulk.
+    bulk_shortcut = get_config("bulk_shortcut", "ctrl+alt+b")
     add_buttons = get_config("add_editor_buttons", True)
     if add_buttons:
         icon_path = os.path.join(addon_path, "icons", "scale.png")

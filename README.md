@@ -29,7 +29,7 @@ management.
 
 ## Usage
 
-Select a field with an image and press `CTRL+S` or `CTRL+SHIFT+S`.
+Select a field with an image and press `CTRL+S` or `CTRL+ALT+B`.
 
 ### Configuration
 
