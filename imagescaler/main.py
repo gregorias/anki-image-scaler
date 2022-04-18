@@ -10,7 +10,7 @@ from aqt.utils import showInfo, showWarning  # type: ignore
 
 import bs4  # type: ignore
 from bs4 import BeautifulSoup  # type: ignore
-from PyQt5.QtWidgets import QInputDialog  # type: ignore
+from PyQt6.QtWidgets import QInputDialog, QWidget
 
 addon_path = os.path.dirname(__file__)
 config = aqt.mw and aqt.mw.addonManager.getConfig(__name__)
@@ -109,9 +109,8 @@ def scale_images_with_css(html: str, height_provider: HeightProvider) -> str:
 
 
 def css_scale(
-    editor: aqt.editor.Editor,
-    height_provider: Callable[[str, aqt.editor.Editor],
-                              Optional[int]]) -> None:
+        editor: aqt.editor.Editor,
+        height_provider: Callable[[str, QWidget], Optional[int]]) -> None:
     # Save the currentField into a variable. Anki may turn editor.currentField
     # to None while running this function, because we show a dialog.
     currentField = editor.currentField
