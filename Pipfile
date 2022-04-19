@@ -10,7 +10,7 @@ mypy = "*"
 grip = "*"
 
 [packages]
-anki = "==2.1.50"
-aqt = "==2.1.50"
-pyqt6 = "==6.3.0"
-PyQt6-WebEngine = "==6.3.0"
+anki = "==2.1.*"
+aqt = "==2.1.*"
+pyqt5 = "==5.14"
+pyqtwebengine = "==5.14"

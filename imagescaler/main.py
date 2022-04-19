@@ -10,7 +10,7 @@ from aqt.utils import showInfo, showWarning  # type: ignore
 
 import bs4  # type: ignore
 from bs4 import BeautifulSoup  # type: ignore
-from PyQt6.QtWidgets import QInputDialog, QWidget
+from PyQt5.QtWidgets import QInputDialog, QWidget  # type: ignore
 
 addon_path = os.path.dirname(__file__)
 config = aqt.mw and aqt.mw.addonManager.getConfig(__name__)
