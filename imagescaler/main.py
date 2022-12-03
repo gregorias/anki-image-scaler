@@ -2,7 +2,7 @@
 """The implementation of the image scaler plugin."""
 import os.path
 import re
-from typing import Any, Callable, List, Optional
+from typing import Any, Callable, List, Optional, Union
 
 import aqt  # type: ignore
 from aqt import gui_hooks
@@ -54,7 +54,7 @@ class BulkHeightProvider:
         self,
         show_dialog: Callable[[str, int, Any],
                               Optional[int]] = show_image_height_dialog):
-        self.height: None | bool | int = None
+        self.height: Optional[Union[bool, int]] = None
         self.show_dialog = show_dialog
 
     def __call__(self, image: str, parent=None) -> Optional[int]:
