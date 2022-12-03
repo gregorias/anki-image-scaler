@@ -43,6 +43,29 @@ You can configure the plugin using Anki's configuration to do the following:
 
 Use pipenv to set up the dev and prod environment.
 
+### Dev Environment Setup
+
+This project requires [Lefthook](https://github.com/evilmartians/lefthook) and
+[Commitlint](https://github.com/conventional-changelog/commitlint).
+
+1. Install the required Python version:
+
+   ```shell
+   pyenv install CHECK_PIPFILE
+   ```
+
+1. Set up Pipenv:
+
+    ```shell
+    pipenv install --dev
+    ```
+
+1. Install Lefthook:
+
+    ```shell
+    lefthook install
+    ```
+
 ### Testing
 
 Run `testall` to run Mypy and unit tests.

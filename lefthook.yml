@@ -1,0 +1,13 @@
+pre-commit:
+  scripts:
+    "format-files.bash":
+      runner: bash
+    "check-asset-version.py":
+      runner: python3
+  commands:
+    unit-tests:
+      run: "./dev/bin/testall"
+commit-msg:
+  commands:
+    commitlint:
+      run: "commitlint --edit={1}"
