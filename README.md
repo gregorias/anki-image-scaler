@@ -68,7 +68,17 @@ This project requires [Lefthook](https://github.com/evilmartians/lefthook) and
 
 ### Testing
 
-Run `testall` to run Mypy and unit tests.
+1. Run unit tests and MyPy with `testall`.
+2. Test supported Anki versions (2.1.49 and latest) by packaging the plugin and
+   importing the plugin into the lowest and the newest support Anki.
+
+### Release & distribution
+
+1. Create a release commit.
+    1. Bump up the package version in `codehighlighter/manifest.json`.
+    2. Tag the release commit `git tag vx.y.z && git push origin vx.y.z`.
+2. Use the `dev/bin/package` tool to create `imagescaler.ankiaddon`.
+3. [Share the package on Anki.](https://addon-docs.ankiweb.net/#/sharing)
 
 ### Publishing
 
