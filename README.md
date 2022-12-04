@@ -33,11 +33,13 @@ Select a field with an image and press `CTRL+S` or `CTRL+ALT+B`.
 
 ### Configuration
 
-You can configure the plugin using Anki's configuration to do the following:
+You can configure the plugin using Anki's configuration with the following variables:
 
-* Change the default height.
-* Change keyboard shortcuts.
-* Stop adding a scale button to the editor (the keyboard shortcut will still be active).
+* `default-height` (default: 150) – the default height of images.
+* `shortcut` — the keyboard shortcut for scaling individual images.
+* `bulk_shortcut` — the keyboard shortcut for scaling all images in bulk.
+* `add_editor_buttons` (default: true) – whether to show editor buttong
+  (keyboard shortcuts will still be active).
 
 ## For Developers
 
