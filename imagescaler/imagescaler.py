@@ -19,34 +19,35 @@ PixelSize = int
 HTML = str
 
 
-def scale_an_image_with_css(img: bs4.element.Tag,
-                            height: int) -> bs4.element.Tag:
+def scale_an_image_with_css(img: bs4.element.Tag, size_property: str,
+                            size: PixelSize) -> bs4.element.Tag:
     """
-    Scales an image tag with the provided max-height value.
+    Scales an image tag with the provided max-height size.
 
     :param img bs4.element.Tag
     :param height int
+    :param size_property str: The property we want to set (e.g., 'max-height').
+    :param size PixelSize: The value of the size property.
     :rtype bs4.element.Tag
     """
-    assert height >= 0
+    assert size >= 0
     img = copy.copy(img)
     if 'style' not in img.attrs:
-        img.attrs['style'] = 'max-height:{height:d}px;'.format(height=height)
+        img.attrs['style'] = f'{size_property:s}:{size:d}px;'
         return img
 
     style = img.attrs['style']
-    m = re.search(r'max-height:[^;]*', style)
+    m = re.search(fr'{size_property}:[^;]*', style)
 
     if not m:
         if not style.endswith(';'):
             style += ';'
-        style += 'max-height:{height:d}px;'.format(height=height)
+        style += f'{size_property:s}:{size:d}px;'
         img.attrs['style'] = style
         return img
 
-    img.attrs['style'] = re.sub(
-        r'(?P<prefix>.*max-height:)[^;]*(.*)',
-        r'\g<prefix>' + '{height:d}'.format(height=height) + r'px\2', style)
+    img.attrs['style'] = re.sub(fr'(?P<prefix>.*{size_property}:)[^;]*(.*)',
+                                fr'\g<prefix>{size:d}px\2', style)
     return img
 
 
@@ -65,12 +66,12 @@ def scale_images_with_css(
     bs = BeautifulSoup(html, features='html.parser')
     imgs = bs.findAll('img')
     for img in imgs:
-        maybe_height = yield ImageSrc(src=img.attrs['src'])
-        if not maybe_height:
+        maybe_size = yield ImageSrc(src=img.attrs['src'])
+        if not maybe_size:
             continue
-        height = maybe_height
-        assert height >= 0
-        img.replace_with(scale_an_image_with_css(img, height))
+        size = maybe_size
+        assert size >= 0
+        img.replace_with(scale_an_image_with_css(img, "max-height", size))
     return str(bs)
 
 
@@ -89,6 +90,7 @@ def generator_to_callback(
     :param g Generator[Y, S, Ret]
     :rtype Callable[[Callable[[Y], S]], Ret]
     """
+
     def handler(oracle: Callable[[Y], S]) -> Ret:
         try:
             hint = next(g)
