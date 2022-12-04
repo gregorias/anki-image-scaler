@@ -1,7 +1,8 @@
 # Anki Image Scaler
 
 An Anki plugin that scales images during editing. This plugin sets CSS
-`max-height` property of all images in a note field to the desired value.
+`max-height` property (configurable) of all images in a note field to the
+desired value.
 
 <p align="center">
   <img src="images/dune-scale.gif" height="350px"/>
@@ -35,11 +36,16 @@ Select a field with an image and press `CTRL+S` or `CTRL+ALT+B`.
 
 You can configure the plugin using Anki's configuration with the following variables:
 
-* `default-height` (default: 150) – the default height of images.
+* `size-property` (default: "max-height") – the CSS property used by the
+  plugin.
+* `default-size` (default: 150) – the default pixel value suggested for
+  `size-property`.
 * `shortcut` — the keyboard shortcut for scaling individual images.
 * `bulk_shortcut` — the keyboard shortcut for scaling all images in bulk.
 * `add_editor_buttons` (default: true) – whether to show editor buttong
   (keyboard shortcuts will still be active).
+
+To apply a new configuration, you need to restart Anki.
 
 ## For Developers
 

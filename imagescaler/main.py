@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """The implementation of the image scaler plugin."""
+from functools import partial
 import os.path
 import re
 from typing import Any, Callable, List, Optional, Union
@@ -25,60 +26,64 @@ def get_config(key: str, default):
         return default
 
 
-HeightProvider = Callable[[str], Optional[int]]
-
-
-def show_image_height_dialog(msg: str,
-                             default_height: int,
-                             parent=None) -> Optional[int]:
+def show_image_size_dialog(msg: str,
+                           size_property: str,
+                           default_size: int,
+                           parent=None) -> Optional[int]:
     parent = parent or (aqt.mw and aqt.mw.app.activeWindow()) or aqt.mw
-    new_height, ok = QInputDialog.getInt(parent,
-                                         'Enter image height',
-                                         msg,
-                                         value=default_height,
-                                         min=0,
-                                         max=10000)
+    new_size, ok = QInputDialog.getInt(parent,
+                                       f'Enter image {size_property}',
+                                       msg,
+                                       value=default_size,
+                                       min=0,
+                                       max=10000)
     if ok:
-        return new_height
+        return new_size
     else:
         return None
 
 
-def ask_for_new_height(image: str, parent=None) -> Optional[int]:
-    return show_image_height_dialog(f'Provide a new height for {image} (px):',
-                                    get_config('default-height', default=150),
-                                    parent)
+def ask_for_new_size(size_property: str,
+                     default_size: imagescaler.PixelSize,
+                     image: str,
+                     parent=None) -> Optional[int]:
+    return show_image_size_dialog(
+        f'Provide a new {size_property} for {image} (px):', size_property,
+        default_size, parent)
 
 
-class BulkHeightProvider:
+class BulkSizeProvider:
 
     def __init__(
         self,
-        show_dialog: Callable[[str, int, Any],
-                              Optional[int]] = show_image_height_dialog):
-        self.height: Optional[Union[bool, int]] = None
+        size_property: str,
+        default_size: int,
+        show_dialog: Callable[[str, str, int, Any],
+                              Optional[int]] = show_image_size_dialog):
+        self.size_property = size_property
+        self.default_size = default_size
+        self.size: Optional[Union[bool, int]] = None
         self.show_dialog = show_dialog
 
     def __call__(self, image: str, parent=None) -> Optional[int]:
-        if self.height == False:
+        if self.size == False:
             return None
-        elif self.height:
-            return self.height
+        elif self.size:
+            return self.size
 
-        user_height = self.show_dialog(
-            "Provide a new height for all images:",
-            get_config('default-height', default=150), parent)
-        if not user_height:
-            self.height = False
-            return user_height
+        user_size = self.show_dialog(
+            f"Provide a new {self.size_property} for all images:",
+            self.size_property, self.default_size, parent)
+        if not user_size:
+            self.size = False
+            return user_size
         else:
-            self.height = user_height
-            return self.height
+            self.size = user_size
+            return self.size
 
 
-def css_scale(
-        editor: aqt.editor.Editor,
-        height_provider: Callable[[str, QWidget], Optional[int]]) -> None:
+def css_scale(editor: aqt.editor.Editor, size_property: str,
+              size_provider: Callable[[str, QWidget], Optional[int]]) -> None:
     # Save the currentField into a variable. Anki may turn editor.currentField
     # to None while running this function, because we show a dialog.
     currentField = editor.currentField
@@ -94,12 +99,12 @@ def css_scale(
         return None
 
     field = currentNote.fields[currentField]
-    # Provide the editor as the parent widget to ask_for_new_height. This way,
-    # when ask_for_new_height's widget quits, focus goes back to the editor.
+    # Provide the editor as the parent widget to ask_for_new_size. This way,
+    # when ask_for_new_size's widget quits, focus goes back to the editor.
     new_field = imagescaler.generator_to_callback(
         imagescaler.scale_images_with_css(
-            "max-height",
-            field))(lambda imgSrc: height_provider(imgSrc.src, editor.widget))
+            size_property,
+            field))(lambda imgSrc: size_provider(imgSrc.src, editor.widget))
     if new_field == field:
         # Don't bother refreshing the editor. It is disturbing, e.g., the field
         # loses focus, so we should avoid it.
@@ -115,6 +120,8 @@ def css_scale(
 
 
 def on_editor_buttons_init(buttons: List, editor: aqt.editor.Editor) -> None:
+    size_property = get_config("size-property", "max-height")
+    default_size = get_config('default-size', default=150)
     shortcut = get_config("shortcut", "ctrl+s")
     # Choosing the default as ctrl+alt+b, because:
     # * ctrl+shift+s is already taken by Anki.
@@ -129,16 +136,21 @@ def on_editor_buttons_init(buttons: List, editor: aqt.editor.Editor) -> None:
         css = editor.addButton(
             icon=icon_path,
             cmd="css_scale",
-            func=lambda editor: css_scale(editor, ask_for_new_height),
-            tip=f"Scale image using max-height ({shortcut}).",
+            func=lambda editor: css_scale(
+                editor, size_property,
+                partial(ask_for_new_size, size_property, default_size)),
+            tip=f"Scale image using {size_property} ({shortcut}).",
             # Skip label, because we already provide an icon.
             keys=shortcut)
         buttons.append(css)
         css = editor.addButton(
             icon=icon_path,
             cmd="bulk_css_scale",
-            func=lambda editor: css_scale(editor, BulkHeightProvider()),
-            tip=f"Scale images in bulk using max-height ({bulk_shortcut}).",
+            func=lambda editor: css_scale(
+                editor, size_property,
+                BulkSizeProvider(size_property, default_size)),
+            tip=
+            f"Scale images in bulk using {size_property} ({bulk_shortcut}).",
             # Skip label, because we already provide an icon.
             keys=bulk_shortcut)
         buttons.append(css)
@@ -146,11 +158,15 @@ def on_editor_buttons_init(buttons: List, editor: aqt.editor.Editor) -> None:
         aqt.qt.QShortcut(  # type: ignore
             aqt.qt.QKeySequence(shortcut),  # type: ignore
             editor.widget,
-            activated=lambda: css_scale(editor, ask_for_new_height))
+            activated=lambda: css_scale(
+                editor, size_property,
+                partial(ask_for_new_size, size_property, default_size)))
         aqt.qt.QShortcut(  # type: ignore
             aqt.qt.QKeySequence(bulk_shortcut),  # type: ignore
             editor.widget,
-            activated=lambda: css_scale(editor, BulkHeightProvider()))
+            activated=lambda: css_scale(
+                editor, size_property,
+                BulkSizeProvider(size_property, default_size)))
 
 
 gui_hooks.editor_did_init_buttons.append(on_editor_buttons_init)

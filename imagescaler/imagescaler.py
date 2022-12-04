@@ -22,10 +22,9 @@ HTML = str
 def scale_an_image_with_css(img: bs4.element.Tag, size_property: str,
                             size: PixelSize) -> bs4.element.Tag:
     """
-    Scales an image tag with the provided max-height size.
+    Scales an image tag with the provided size.
 
     :param img bs4.element.Tag
-    :param height int
     :param size_property str: The property we want to set (e.g., 'max-height').
     :param size PixelSize: The value of the size property.
     :rtype bs4.element.Tag

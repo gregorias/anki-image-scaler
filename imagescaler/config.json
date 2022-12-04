@@ -1,5 +1,6 @@
 {
-  "default-height": 150,
+  "size-property": "max-height",
+  "default-size": 150,
   "shortcut": "ctrl+s",
   "bulk_shortcut": "ctrl+alt+b",
   "add_editor_buttons": true
