@@ -97,8 +97,9 @@ def css_scale(
     # Provide the editor as the parent widget to ask_for_new_height. This way,
     # when ask_for_new_height's widget quits, focus goes back to the editor.
     new_field = imagescaler.generator_to_callback(
-        imagescaler.scale_images_with_css(field))(
-            lambda imgSrc: height_provider(imgSrc.src, editor.widget))
+        imagescaler.scale_images_with_css(
+            "max-height",
+            field))(lambda imgSrc: height_provider(imgSrc.src, editor.widget))
     if new_field == field:
         # Don't bother refreshing the editor. It is disturbing, e.g., the field
         # loses focus, so we should avoid it.

@@ -12,7 +12,21 @@ class ScaleWithCssTestCase(unittest.TestCase):
         expected_output = (
             '<div><img src="a.png" style="max-height:200px;"/></div>')
 
-        g = scale_images_with_css(input)
+        g = scale_images_with_css("max-height", input)
+        self.assertEqual(next(g), ImageSrc(src='a.png'))
+        try:
+            g.send(200)
+        except StopIteration as s:
+            self.assertEqual(s.value, expected_output)
+        else:
+            self.fail("Expected a return value.")
+
+    def test_scales_on_max_width(self):
+        input = ('<div><img src="a.png"/></div>')
+        expected_output = (
+            '<div><img src="a.png" style="max-width:200px;"/></div>')
+
+        g = scale_images_with_css("max-width", input)
         self.assertEqual(next(g), ImageSrc(src='a.png'))
         try:
             g.send(200)
@@ -27,7 +41,7 @@ class ScaleWithCssTestCase(unittest.TestCase):
             '<div><img src="a.png" style="border:1px;max-height:200px;"/></div>'
         )
 
-        g = scale_images_with_css(input)
+        g = scale_images_with_css("max-height", input)
         self.assertEqual(next(g), ImageSrc(src='a.png'))
         try:
             g.send(200)
@@ -41,7 +55,7 @@ class ScaleWithCssTestCase(unittest.TestCase):
         expected_output = (
             '<div><img src="a.png" style="max-height:200px;"/></div>')
 
-        g = scale_images_with_css(input)
+        g = scale_images_with_css("max-height", input)
         self.assertEqual(next(g), ImageSrc(src='a.png'))
         try:
             g.send(200)
@@ -56,7 +70,7 @@ class ScaleWithCssTestCase(unittest.TestCase):
             '<div>{{c1::<img src="dune.jpg" style="max-height:200px;"/>}}' +
             '</div>')
 
-        g = scale_images_with_css(input)
+        g = scale_images_with_css("max-height", input)
         self.assertEqual(next(g), ImageSrc(src='dune.jpg'))
         try:
             g.send(200)
@@ -73,7 +87,7 @@ class ScaleWithCssTestCase(unittest.TestCase):
             '<img src="ignore.jpg"/>' +
             '<img src="img.jpg" style="max-height:200px;"/></div>')
 
-        g = scale_images_with_css(input)
+        g = scale_images_with_css("max-height", input)
         self.assertEqual(next(g), ImageSrc(src='context.jpg'))
         self.assertEqual(g.send(100), ImageSrc(src='ignore.jpg'))
         self.assertEqual(g.send(None), ImageSrc(src='img.jpg'))
@@ -89,7 +103,7 @@ class ScaleWithCssTestCase(unittest.TestCase):
         expected_output = '<div>&lt;img&gt;</div>'
 
         try:
-            next(scale_images_with_css(input))
+            next(scale_images_with_css("max-height", input))
         except StopIteration as s:
             self.assertEqual(s.value, expected_output)
         else:

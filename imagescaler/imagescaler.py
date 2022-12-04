@@ -54,11 +54,13 @@ def scale_an_image_with_css(img: bs4.element.Tag, size_property: str,
 # I'm using a generator instead of a callback, because a generator is more
 # generic. It allows tests to have a more natural control over this process.
 def scale_images_with_css(
+    size_property: str,
     html: HTML
 ) -> typing.Generator[ImageSrc, typing.Optional[PixelSize], HTML]:
     """
     Scales all images in the provided HTML.
 
+    :param size_property str: The property we want to set (e.g., 'max-height').
     :param html HTML: The HTML with images to scale.
     :rtype typing.Generator[ImageSrc, typing.Optional[PixelSize], HTML]:
         A generator that asks for the desired size of each image.
@@ -71,7 +73,7 @@ def scale_images_with_css(
             continue
         size = maybe_size
         assert size >= 0
-        img.replace_with(scale_an_image_with_css(img, "max-height", size))
+        img.replace_with(scale_an_image_with_css(img, size_property, size))
     return str(bs)
 
 
