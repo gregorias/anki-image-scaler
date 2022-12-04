@@ -5,6 +5,7 @@ verify_ssl = true
 
 [dev-packages]
 mypy = "*"
+types-beautifulsoup4 = "*"
 
 [packages]
 anki = "==2.1.50"

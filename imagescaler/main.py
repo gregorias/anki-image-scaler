@@ -8,9 +8,11 @@ import aqt  # type: ignore
 from aqt import gui_hooks
 from aqt.utils import showInfo, showWarning  # type: ignore
 
-import bs4  # type: ignore
-from bs4 import BeautifulSoup  # type: ignore
+import bs4
+from bs4 import BeautifulSoup
 from PyQt5.QtWidgets import QInputDialog, QWidget  # type: ignore
+
+from . import imagescaler
 
 addon_path = os.path.dirname(__file__)
 config = aqt.mw and aqt.mw.addonManager.getConfig(__name__)
@@ -74,40 +76,6 @@ class BulkHeightProvider:
             return self.height
 
 
-def scale_an_image_with_css(img: bs4.element.Tag, height: int) -> None:
-    assert (height >= 0)
-    if 'style' not in img.attrs:
-        img.attrs['style'] = 'max-height:{height:d}px;'.format(height=height)
-        return None
-
-    style = img.attrs['style']
-    m = re.search(r'max-height:[^;]*', style)
-
-    if not m:
-        if not style.endswith(';'):
-            style += ';'
-        style += 'max-height:{height:d}px;'.format(height=height)
-        img.attrs['style'] = style
-        return None
-
-    img.attrs['style'] = re.sub(
-        r'(?P<prefix>.*max-height:)[^;]*(.*)',
-        r'\g<prefix>' + '{height:d}'.format(height=height) + r'px\2', style)
-
-
-def scale_images_with_css(html: str, height_provider: HeightProvider) -> str:
-    bs = BeautifulSoup(html, features='html.parser')
-    imgs = bs.findAll('img')
-    for img in imgs:
-        maybe_height = height_provider(img.attrs['src'])
-        if not maybe_height:
-            continue
-        height = maybe_height
-        assert (height >= 0)
-        scale_an_image_with_css(img, height)
-    return str(bs)
-
-
 def css_scale(
         editor: aqt.editor.Editor,
         height_provider: Callable[[str, QWidget], Optional[int]]) -> None:
@@ -128,8 +96,9 @@ def css_scale(
     field = currentNote.fields[currentField]
     # Provide the editor as the parent widget to ask_for_new_height. This way,
     # when ask_for_new_height's widget quits, focus goes back to the editor.
-    new_field = scale_images_with_css(
-        field, lambda img: height_provider(img, editor.widget))
+    new_field = imagescaler.generator_to_callback(
+        imagescaler.scale_images_with_css(field))(
+            lambda imgSrc: height_provider(imgSrc.src, editor.widget))
     if new_field == field:
         # Don't bother refreshing the editor. It is disturbing, e.g., the field
         # loses focus, so we should avoid it.
