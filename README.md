@@ -83,7 +83,7 @@ This project requires [Lefthook](https://github.com/evilmartians/lefthook) and
 ### Release & distribution
 
 1. Create a release commit.
-    1. Bump up the package version in `codehighlighter/manifest.json`.
+    1. Bump up the package version in `imagescaler/manifest.json`.
     2. Tag the release commit `git tag vx.y.z && git push origin vx.y.z`.
 2. Use the `dev/bin/package` tool to create `imagescaler.ankiaddon`.
 3. [Share the package on Anki.](https://addon-docs.ankiweb.net/#/sharing)
