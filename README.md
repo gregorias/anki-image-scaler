@@ -23,6 +23,11 @@ You can install directly from
 [AnkiWeb](https://ankiweb.net/shared/info/1312865748) using Anki's addon
 management.
 
+### From GitHub Releases
+
+You can fetch an addon package from [the GitHub Releases
+tab](https://github.com/gregorias/anki-image-scaler/releases).
+
 ### From Source
 
 1. Run `package`.
