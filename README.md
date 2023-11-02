@@ -47,7 +47,7 @@ You can configure the plugin using Anki's configuration with the following varia
   `size-property`.
 * `shortcut` — the keyboard shortcut for scaling individual images.
 * `bulk_shortcut` — the keyboard shortcut for scaling all images in bulk.
-* `add_editor_buttons` (default: true) – whether to show editor buttong
+* `add_editor_buttons` (default: true) – whether to show editor button
   (keyboard shortcuts will still be active).
 
 To apply a new configuration, you need to restart Anki.
