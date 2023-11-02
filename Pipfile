@@ -14,4 +14,4 @@ pyqt6 = "==6.3.*"
 PyQt6-WebEngine = "==6.3.*"
 
 [requires]
-python_version = "3.9.7"
+python_version = "3.9"

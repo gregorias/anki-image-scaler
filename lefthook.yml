@@ -5,6 +5,8 @@ pre-commit:
     "check-asset-version.py":
       runner: python3
   commands:
+    pipenv-check:
+      run: "pipenv check"
     unit-tests:
       run: "./dev/bin/testall"
 commit-msg:
