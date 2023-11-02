@@ -1,4 +1,4 @@
-# Anki Image Scaler
+# ⚖️ Anki Image Scaler
 
 An Anki plugin that scales images during editing. This plugin sets CSS
 `max-height` property (configurable) of all images in a note field to the
