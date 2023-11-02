@@ -1,17 +1,16 @@
-# -*- coding: utf-8 -*-
 """The implementation of the image scaler plugin."""
 from functools import partial
 import os.path
 import re
 from typing import Any, Callable, List, Optional, Union
 
-import aqt  # type: ignore
+import aqt
 from aqt import gui_hooks
-from aqt.utils import showInfo, showWarning  # type: ignore
+from aqt.utils import showInfo, showWarning
 
 import bs4
 from bs4 import BeautifulSoup
-from PyQt5.QtWidgets import QInputDialog, QWidget  # type: ignore
+from aqt.qt import QInputDialog, QWidget
 
 from . import imagescaler
 

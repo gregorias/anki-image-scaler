@@ -8,10 +8,10 @@ mypy = "*"
 types-beautifulsoup4 = "*"
 
 [packages]
-anki = "==2.1.50"
-aqt = "==2.1.50"
-pyqt6 = "==6.3.*"
-PyQt6-WebEngine = "==6.3.*"
+anki = "==23.10"
+aqt = "==23.10"
+pyqt6 = "==6.*"
+PyQt6-WebEngine = "==6.*"
 
 [requires]
 python_version = "3.9"
