@@ -8,10 +8,12 @@ mypy = "*"
 types-beautifulsoup4 = "*"
 
 [packages]
-anki = "==23.10"
-aqt = "==23.10"
-pyqt6 = "==6.*"
-PyQt6-WebEngine = "==6.*"
+anki = "==24.6.3"
+aqt = "==24.6.3"
+# Use the same version of PyQt6 as Anki:
+# https://github.com/ankitects/anki/blob/72e57456ceb1e97a37198d490ea1ca72e38f61f6/python/requirements.qt6_mac.txt#L1
+pyqt6 = "==6.5.2"
+PyQt6-WebEngine = "==6.5.0"
 
 [requires]
 python_version = "3.9"
