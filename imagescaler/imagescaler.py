@@ -53,8 +53,7 @@ def scale_an_image_with_css(img: bs4.element.Tag, size_property: str,
 # I'm using a generator instead of a callback, because a generator is more
 # generic. It allows tests to have a more natural control over this process.
 def scale_images_with_css(
-    size_property: str,
-    html: HTML
+    size_property: str, html: HTML
 ) -> typing.Generator[ImageSrc, typing.Optional[PixelSize], HTML]:
     """
     Scales all images in the provided HTML.
@@ -65,7 +64,7 @@ def scale_images_with_css(
         A generator that asks for the desired size of each image.
     """
     bs = BeautifulSoup(html, features='html.parser')
-    imgs = bs.findAll('img')
+    imgs = bs.find_all('img')
     for img in imgs:
         maybe_size = yield ImageSrc(src=img.attrs['src'])
         if not maybe_size:
