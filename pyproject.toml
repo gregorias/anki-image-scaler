@@ -1,0 +1,41 @@
+[project]
+name = "anki-word-scaler"
+version = "0.1.0"
+description = "Anki add-on for scaling images."
+authors = [{ name = "Grzegorz Milka", email = "grzegorzmilka@gmail.com" }]
+# Use 3.13, because that’s what Anki uses
+# (https://github.com/ankitects/anki/releases/tag/25.07).
+requires-python = ">=3.13.5, <3.14"
+readme = "README.md"
+license = "AGPLv3"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+  "Operating System :: OS Independent",
+]
+dependencies = [
+  # https://pypi.org/project/anki/
+  "anki==25.7.1",
+  # https://pypi.org/project/aqt/
+  "aqt==25.7.1",
+  # Use the same version of PyQt6 as Anki:
+  # https://github.com/ankitects/anki/blob/f927aa5788aef7c5a1595b2dc4879db82725f8c6/qt/pyproject.toml#L47-L53
+  "pyqt6==6.8.0",
+  "pyqt6-qt6==6.8.1",
+  "PyQt6-WebEngine==6.8.0",
+  "PyQt6-WebEngine-qt6==6.8.1",
+]
+
+[project.urls]
+Repository = "https://github.com/gregorias/anki-word-hyphenator"
+
+[dependency-groups]
+dev = ["mypy>=1.16", "vulture~=2.14", "coverage", "types-beautifulsoup4"]
+
+[tool.uv]
+# We use Python only for the dependency management, not for packaging.
+# This is because Anki plugins are distributed as zipped directories, not as wheels.
+package = false
+
+[tool.vulture]
+ignore_names = []

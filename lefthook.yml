@@ -1,14 +1,14 @@
 pre-commit:
   commands:
+    black:
+      tags: style
+      glob: "*.py"
+      run: black {staged_files} && git add {staged_files}
     markdownlint:
       tags: documentation style lint
       files: git diff --name-only --cached --diff-filter=AM
-      glob: '*.md'
+      glob: "*.md"
       run: markdownlint {files}
-    yapf:
-      tags: style
-      glob: '*.py'
-      run: yapf -i -r {staged_files} && git add {staged_files}
     unit-tests:
       run: "./dev/bin/testall"
 commit-msg:

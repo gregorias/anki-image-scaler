@@ -6,8 +6,8 @@ This is a documentation file for this plugin's developers.
 
 This project requires
 
-- [Lefthook](https://github.com/evilmartians/lefthook)
 - [Commitlint](https://github.com/conventional-changelog/commitlint)
+- [Lefthook](https://github.com/evilmartians/lefthook)
 
 1. Install the required Python version:
 
@@ -15,17 +15,23 @@ This project requires
    pyenv install
    ```
 
-1. Set up Pipenv:
+1. Set up a local virtual environment:
 
-    ```shell
-    pipenv install --dev
-    ```
+   ```shell
+   uv venv
+   ```
+
+1. Install development dependencies:
+
+   ```shell
+   uv pip install --group dev
+   ```
 
 1. Install Lefthook:
 
-    ```shell
-    lefthook install
-    ```
+   ```shell
+   lefthook install
+   ```
 
 ## Testing
 
@@ -37,8 +43,8 @@ This project requires
 ## Release & distribution
 
 1. Create a release commit.
-    1. Bump up the package version in `imagescaler/manifest.json`.
-    2. Tag the release commit `git tag vx.y.z && git push origin vx.y.z`.
+   1. Bump up the package version in `imagescaler/manifest.json`.
+   2. Tag the release commit `git tag vx.y.z && git push origin vx.y.z`.
 1. Use the `dev/bin/package` tool to create `imagescaler.ankiaddon`.
 1. Create a GitHub release: `gh release create vx.y.z imagescaler.ankiaddon`.
 
